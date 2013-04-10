@@ -1,0 +1,22 @@
+// Initialize variables
+int curTemp=0;
+int tempintercept = 51;
+int threshold;
+
+void setup(){
+ pinMode(A1, INTPUT);
+ pinMode(D13, OUTPUT);
+}
+
+void loop(){        // Heater
+// Compute current temperature
+curTemp = (analogRead(A1)-temptintercept)/5; //voltage readin +/- intercept and * slope
+
+// Turn the heater on while the current temperature < miniumum threshold
+if(curTemp<threshold){
+digitalwrite(D13,High); // Set the pin high
+}
+else{
+digitalwrite(D13,LOW);
+}
+}
