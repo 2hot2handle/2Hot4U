@@ -9,6 +9,35 @@ int maxthreshold=240;
 int scaryhigh = 300;
 ////
 int settemp;
+char buf[10]; // string buffer for itoa function
+#define btnRIGHT 0
+#define btnUP 1
+#define btnDOWN 2
+#define btnLEFT 3
+#define btnSELECT 4
+#define btnNONE 5
+#define V1 50
+#define V2 154
+#define V3 379
+#define V4 554
+#define V5 791
+#define VNONE 791
+// read the buttons
+int read_LCD_buttons()
+{
+adc_key_in = analogRead(0); // read the value from the sensor
+// my buttons when read are centered at these valies: 0, 144, 329, 504, 741
+// we add approx 50 to those values and check to see if we are close
+if (adc_key_in > VNONE) return btnNONE;
+// We make this the 1st option for speed reasons since it will be the most likely result
+else if (adc_key_in <= V1) return btnRIGHT;
+else if (adc_key_in <= V2) return btnUP;
+else if (adc_key_in <= V3) return btnDOWN;
+else if (adc_key_in <= V4) return btnLEFT;
+else if (adc_key_in <= V5) return btnSELECT;
+return btnNONE; // when all others fail, return this...
+}
+
 
 void setup(){
  pinMode(A1, INTPUT);
