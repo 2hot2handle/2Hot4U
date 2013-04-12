@@ -4,10 +4,8 @@ LiquidCrystal lcd(12, 11, 10, 5, 4, 3, 2);
 // Initialize variables
 int curTemp=0;
 int tempintercept = 51;
-int minthreshold=215;
-int maxthreshold=240;
 int scaryhigh = 300;
-int selecttemp=25;
+int selecttemp=215;
 ////
 int settemp;
 char buf[10]; // string buffer for itoa function
@@ -39,8 +37,28 @@ else if (adc_key_in <= V5) return btnSELECT;
 return btnNONE; // when all others fail, return this...
 }
 
-void choosetempt(){
-switch (lcd_key) // depending on which button was pushed, we perform an action
+// check for a select press
+void checkpause(){
+digitalwrite(D13,LOW); // For safety
+switch (lcd_key) 
+case btnSELECT:
+{if(select==true)
+select=false;
+else select=true;
+break;
+}
+if(select=true){
+choosetemp();
+}
+}
+
+// Choose the set temperature
+void selectT(){
+lcd.setCursor(0,1);
+lcd.print("Set to ");
+lcd.print(settemp);
+lcd.print(" C");
+switch (lcd_key)
 {
 case btnRIGHT:
 {
@@ -63,8 +81,9 @@ settemp=settemp-1;
 break;
 }
 case btnSELECT:
-{
-select=true;
+{if(select==true)
+select=false;
+else select=true;
 break;
 }
 case btnNONE:
@@ -73,6 +92,7 @@ break;
 }
 }
 
+// Setup pins
 void setup(){
  pinMode(A1, INTPUT);
  pinMode(D13, OUTPUT);
@@ -81,18 +101,23 @@ void setup(){
 void loop(){        // Heater
 // Compute current temperature
 curTemp = (analogRead(A1)-temptintercept)/5; //voltage readin +/- intercept and * slope
-lcd.print("Temp = ")
-lcd.print(curTemp)
-lcd.print("C")
+lcd.setCursor(0, 0);
+lcd.print("Temp = ");
+lcd.print(curTemp);
+lcd.print(" C");
+lcd.setCursor(0, 1);
+lcd.print("Set to ");
+lcd.print(settemp);
+lcd.print(" C");
+checkpause();
 
 // Turn the heater on while the current temperature < miniumum threshold
-if(curTemp<minthreshold){
+if(curTemp<settemp){
 digitalwrite(D13,High); // Set the pin high
 }
 else if (curTemp>scaryhigh){
 lcd.print("Run for cover!")
-}
-else if(curTemp>maxthreshold){
 digitalwrite(D13,LOW);
 }
+else digitalwrite(D13,LOW);
 }
