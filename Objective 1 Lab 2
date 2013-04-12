@@ -62,3 +62,42 @@ else if(curTemp>maxthreshold){
 digitalwrite(D13,LOW);
 }
 }
+
+switch (lcd_key) // depending on which button was pushed, we perform an action
+{
+case btnRIGHT:
+{
+ 
+//Instructions for what to do on RIGHT button press
+break;
+}
+case btnLEFT:
+{
+//Instructions for what to do on LEFT button press
+break;
+}
+case btnUP:
+{
+//Instructions for what to do on UP button press
+break;
+}
+case btnDOWN:
+{
+//Instructions for what to do on DOWN button press
+break;
+}
+case btnSELECT:
+{
+ 
+  }
+//Instructions for what to do on SELECT button press
+break;
+}
+case btnNONE:
+{
+ 
+  }
+//Instructions for what to do if no button is pressed.
+break;
+}
+}
