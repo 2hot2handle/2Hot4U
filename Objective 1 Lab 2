@@ -7,6 +7,7 @@ int tempintercept = 51;
 int minthreshold=215;
 int maxthreshold=240;
 int scaryhigh = 300;
+int selecttemp=25;
 ////
 int settemp;
 char buf[10]; // string buffer for itoa function
@@ -38,6 +39,39 @@ else if (adc_key_in <= V5) return btnSELECT;
 return btnNONE; // when all others fail, return this...
 }
 
+void choosetempt(){
+switch (lcd_key) // depending on which button was pushed, we perform an action
+{
+case btnRIGHT:
+{
+settemp=settemp+10;
+break;
+}
+case btnLEFT:
+{
+settemp=settemp-10;
+break;
+}
+case btnUP:
+{
+settemp=settemp+1;
+break;
+}
+case btnDOWN:
+{
+settemp=settemp-1;
+break;
+}
+case btnSELECT:
+{
+select=true;
+break;
+}
+case btnNONE:
+{
+break;
+}
+}
 
 void setup(){
  pinMode(A1, INTPUT);
@@ -47,9 +81,9 @@ void setup(){
 void loop(){        // Heater
 // Compute current temperature
 curTemp = (analogRead(A1)-temptintercept)/5; //voltage readin +/- intercept and * slope
-// maybe lcd.print("Temp = ")
-// lcd.print(curTemp)
-// lcd.print("C")
+lcd.print("Temp = ")
+lcd.print(curTemp)
+lcd.print("C")
 
 // Turn the heater on while the current temperature < miniumum threshold
 if(curTemp<minthreshold){
@@ -60,44 +94,5 @@ lcd.print("Run for cover!")
 }
 else if(curTemp>maxthreshold){
 digitalwrite(D13,LOW);
-}
-}
-
-switch (lcd_key) // depending on which button was pushed, we perform an action
-{
-case btnRIGHT:
-{
- 
-//Instructions for what to do on RIGHT button press
-break;
-}
-case btnLEFT:
-{
-//Instructions for what to do on LEFT button press
-break;
-}
-case btnUP:
-{
-//Instructions for what to do on UP button press
-break;
-}
-case btnDOWN:
-{
-//Instructions for what to do on DOWN button press
-break;
-}
-case btnSELECT:
-{
- 
-  }
-//Instructions for what to do on SELECT button press
-break;
-}
-case btnNONE:
-{
- 
-  }
-//Instructions for what to do if no button is pressed.
-break;
 }
 }
