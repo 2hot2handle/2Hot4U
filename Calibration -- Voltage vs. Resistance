@@ -1,0 +1,19 @@
+int Pin=A1;
+int val=0;
+
+// include the library code:
+#include <LiquidCrystal.h>
+// BME354L - Palmeri - Spring 2013 Arduino Project
+
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  val=analogRead(Pin);
+  Serial.println(val);
+  delay(1000);
+}
