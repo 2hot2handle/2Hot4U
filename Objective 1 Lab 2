@@ -8,7 +8,7 @@ int curTemp=0;
 int tempintercept = 51;
 int scaryhigh = 300;
 int selecttemp=215;
-select=true;
+boolean select=true;
 ////
 int settemp;
 char buf[10]; // string buffer for itoa function
@@ -42,7 +42,7 @@ return btnNONE; // when all others fail, return this...
 
 // check for a select press
 void checkpause(){
-digitalwrite(D13,LOW); // For safety
+digitalWrite(13,LOW); // For safety
 switch (lcd_key) 
 case btnSELECT:
 {if(select==true)
@@ -56,7 +56,7 @@ choosetemp();
 }
 
 // Choose the set temperature
-void selectT(){
+void choosetemp(){
 lcd.setCursor(0,1);
 lcd.print("Set to ");
 lcd.print(settemp);
@@ -94,16 +94,17 @@ case btnNONE:
 break;
 }
 }
+}
 
 // Setup pins
 void setup(){
- pinMode(1, INTPUT);
+ pinMode(1, INPUT);
  pinMode(13, OUTPUT);
 }
 
 void loop(){        // Heater
 // Compute current temperature
-curTemp = (analogRead(1)-temptintercept)/5; //voltage readin +/- intercept and * slope
+curTemp = (analogRead(1)-tempintercept)/5; //voltage readin +/- intercept and * slope
 lcd.setCursor(0, 0);
 lcd.print("Temp = ");
 lcd.print(curTemp);
@@ -116,10 +117,10 @@ checkpause();
 
 // Turn the heater on while the current temperature < miniumum threshold
 if(curTemp<settemp){
-digitalWrite(13,High); // Set the pin high
+digitalWrite(13,HIGH); // Set the pin high
 }
 else if (curTemp>scaryhigh){
-lcd.print("Run for cover!")
+lcd.print("Run for cover!");
 digitalWrite(13,LOW);
 }
 else digitalWrite(13,LOW);
