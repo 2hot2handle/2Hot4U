@@ -5,7 +5,7 @@ LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 int lcd_key = 0;
 int adc_key_in = 0;
 int curTemp=0;
-int tempintercept = 485-125;
+int tempintercept = 465-125;
 int scaryhigh = 300;
 int settemp=215;
 int Pin=A1;
@@ -44,7 +44,7 @@ lcd.setCursor(0, 1);
 lcd.print("Set to ");
 lcd.print(settemp);
 lcd.print(" C");
-checkpause();
+choosetemp();
 
 // Turn the heater on while the current temperature < miniumum threshold
 if(curTemp<settemp){
@@ -70,22 +70,6 @@ else if (adc_key_in <= V3) return btnDOWN;
 else if (adc_key_in <= V4) return btnLEFT;
 else if (adc_key_in <= V5) return btnSELECT;
 return btnNONE; // when all others fail, return this...
-}
-
-
-// check for a select press
-void checkpause(){
-digitalWrite(13,LOW); // For safety
-switch (lcd_key) 
-case btnSELECT:
-{if(select==false)
-select=true;
-else select=false;
-break;
-}
-if(select=true){
-choosetemp();
-}
 }
 
 // Choose the set temperature
