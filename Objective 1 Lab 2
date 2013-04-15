@@ -5,7 +5,7 @@ LiquidCrystal lcd(12, 11, 10, 5, 4, 3, 2);
 int lcd_key = 0;
 int adc_key_in = 0;
 int curTemp=0;
-int tempintercept = 51;
+int tempintercept = 485-125;
 int scaryhigh = 300;
 int selecttemp=215;
 boolean select=true;
