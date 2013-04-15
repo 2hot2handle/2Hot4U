@@ -1,5 +1,5 @@
 #include <LiquidCrystal.h>
-LiquidCrystal lcd(12, 11, 10, 5, 4, 3, 2);
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 // Initialize variables
 int lcd_key = 0;
@@ -7,10 +7,11 @@ int adc_key_in = 0;
 int curTemp=0;
 int tempintercept = 485-125;
 int scaryhigh = 300;
-int selecttemp=215;
+int settemp=215;
+int Pin=A1;
+int Pout=13;
 boolean select=true;
 ////
-int settemp;
 char buf[10]; // string buffer for itoa function
 #define btnRIGHT 0
 #define btnUP 1
@@ -25,98 +26,16 @@ char buf[10]; // string buffer for itoa function
 #define V5 791
 #define VNONE 791
 // read the buttons
-int read_LCD_buttons()
-{
-adc_key_in = analogRead(0); // read the value from the sensor
-// my buttons when read are centered at these valies: 0, 144, 329, 504, 741
-// we add approx 50 to those values and check to see if we are close
-if (adc_key_in > VNONE) return btnNONE;
-// We make this the 1st option for speed reasons since it will be the most likely result
-else if (adc_key_in <= V1) return btnRIGHT;
-else if (adc_key_in <= V2) return btnUP;
-else if (adc_key_in <= V3) return btnDOWN;
-else if (adc_key_in <= V4) return btnLEFT;
-else if (adc_key_in <= V5) return btnSELECT;
-return btnNONE; // when all others fail, return this...
-}
-
-// check for a select press
-void checkpause(){
-digitalWrite(13,LOW); // For safety
-switch (lcd_key) 
-case btnSELECT:
-{if(select==true)
-select=false;
-else select=true;
-break;
-}
-if(select=true){
-choosetemp();
-}
-}
-
-// Choose the set temperature
-void choosetemp(){
-lcd.setCursor(0,1);
-lcd.print("Set to ");
-lcd.print(settemp);
-lcd.print(" C");
-switch (lcd_key)
-{
-case btnRIGHT:
-{
-if(settemp>=250){
-lcd.print("Too high")
-}
-else settemp=settemp+10;
-break;
-}
-case btnLEFT:
-{
-if(settemp<=25){
-lcd.print("Too low")
-}
-else settemp=settemp-10;
-break;
-}
-case btnUP:
-{
-if(settemp>=250){
-lcd.print("Too high")
-}
-else settemp=settemp+1;
-break;
-}
-case btnDOWN:
-{
-if(settemp<=25){
-lcd.print("Too low")
-}
-else settemp=settemp-1;
-break;
-}
-case btnSELECT:
-{if(select==true)
-select=false;
-else select=true;
-break;
-}
-case btnNONE:
-{
-break;
-}
-}
-}
-
 // Setup pins
 void setup(){
- pinMode(1, INPUT);
- pinMode(13, OUTPUT);
+ pinMode(Pin, INPUT);
+ pinMode(Pout, OUTPUT);
+ lcd.begin(16,2);
+// void loop();
 }
-
 void loop(){        // Heater
 // Compute current temperature
-curTemp = (analogRead(1)-tempintercept)/5; //voltage readin +/- intercept and * slope
+curTemp = (analogRead(Pin)-tempintercept)/5; //voltage readin +/- intercept and * slope
 lcd.setCursor(0, 0);
 lcd.print("Temp = ");
 lcd.print(curTemp);
@@ -136,4 +55,92 @@ lcd.print("Run for cover!");
 digitalWrite(13,LOW);
 }
 else digitalWrite(13,LOW);
+}
+
+int read_LCD_buttons()
+{
+adc_key_in = analogRead(0); // read the value from the sensor
+// my buttons when read are centered at these valies: 0, 144, 329, 504, 741
+// we add approx 50 to those values and check to see if we are close
+if (adc_key_in > VNONE) return btnNONE;
+// We make this the 1st option for speed reasons since it will be the most likely result
+else if (adc_key_in <= V1) return btnRIGHT;
+else if (adc_key_in <= V2) return btnUP;
+else if (adc_key_in <= V3) return btnDOWN;
+else if (adc_key_in <= V4) return btnLEFT;
+else if (adc_key_in <= V5) return btnSELECT;
+return btnNONE; // when all others fail, return this...
+}
+
+
+// check for a select press
+void checkpause(){
+digitalWrite(13,LOW); // For safety
+switch (lcd_key) 
+case btnSELECT:
+{if(select==false)
+select=true;
+else select=false;
+break;
+}
+if(select=true){
+choosetemp();
+}
+}
+
+// Choose the set temperature
+void choosetemp(){
+lcd.setCursor(0,1);
+lcd.print("Set to ");
+lcd.print(settemp);
+lcd.print(" C");
+switch (lcd_key)
+{
+case btnRIGHT:
+{
+if(settemp>=250){
+lcd.setCursor(0, 0);
+lcd.print("Too high");
+}
+else settemp=settemp+10;
+break;
+}
+case btnLEFT:
+{
+if(settemp<=25){
+lcd.setCursor(0, 0);
+lcd.print("Too low");
+}
+else settemp=settemp-10;
+break;
+}
+case btnUP:
+{
+if(settemp>=250){
+lcd.setCursor(0, 0);
+lcd.print("Too high");
+}
+else settemp=settemp+1;
+break;
+}
+case btnDOWN:
+{
+if(settemp<=25){
+lcd.setCursor(0, 0);
+lcd.print("Too low");
+}
+else settemp=settemp-1;
+break;
+}
+case btnSELECT:
+{if(select==true)
+select=false;
+else select=true;
+break;
+}
+case btnNONE:
+{
+break;
+}
+}
 }
