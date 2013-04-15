@@ -65,22 +65,34 @@ switch (lcd_key)
 {
 case btnRIGHT:
 {
-settemp=settemp+10;
+if(settemp>=250){
+lcd.print("Too High")
+}
+else settemp=settemp+10;
 break;
 }
 case btnLEFT:
 {
-settemp=settemp-10;
+if(settemp<=25){
+lcd.print("Too low")
+}
+else settemp=settemp-10;
 break;
 }
 case btnUP:
 {
-settemp=settemp+1;
+if(settemp>=250){
+lcd.print("Too High")
+}
+else settemp=settemp+1;
 break;
 }
 case btnDOWN:
 {
-settemp=settemp-1;
+if(settemp<=25){
+lcd.print("Too low")
+}
+else settemp=settemp-1;
 break;
 }
 case btnSELECT:
