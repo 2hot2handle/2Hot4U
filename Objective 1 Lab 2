@@ -20,7 +20,7 @@ char buf[10]; // string buffer for itoa function
 #define btnSELECT 4
 #define btnNONE 5
 #define V1 50
-#define V2 154
+#define V2 194
 #define V3 379
 #define V4 554
 #define V5 791
@@ -31,8 +31,8 @@ void setup(){
  pinMode(Pin, INPUT);
  pinMode(Pout, OUTPUT);
  lcd.begin(16,2);
-// void loop();
 }
+
 void loop(){        // Heater
 // Compute current temperature
 curTemp = (analogRead(Pin)-tempintercept)/5; //voltage readin +/- intercept and * slope
@@ -81,49 +81,49 @@ lcd.print(" C");
 switch (lcd_key)
 {
 case btnRIGHT:
-{
+
 if(settemp>=250){
 lcd.setCursor(0, 0);
 lcd.print("Too high");
 }
-else settemp=settemp+10;
+else {settemp=settemp+10;}
 break;
-}
+
 case btnLEFT:
-{
+
 if(settemp<=25){
 lcd.setCursor(0, 0);
 lcd.print("Too low");
 }
-else settemp=settemp-10;
+else {settemp=settemp-10;}
 break;
-}
+
 case btnUP:
-{
+
 if(settemp>=250){
 lcd.setCursor(0, 0);
-lcd.print("Too high");
-}
-else settemp=settemp+1;
+lcd.print("Too high");}
+
+else {settemp=settemp+1;}
 break;
-}
+
 case btnDOWN:
-{
+
 if(settemp<=25){
 lcd.setCursor(0, 0);
-lcd.print("Too low");
-}
-else settemp=settemp-1;
+lcd.print("Too low");}
+
+else {settemp=settemp-1;}
 break;
-}
+
 case btnSELECT:
-{if(select==true)
-select=false;
-else select=true;
+if(select==true)
+{select=false;}
+else {select=true;}
 break;
-}
+
 case btnNONE:
-{
+
 break;
 }
 }
