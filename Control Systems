@@ -1,0 +1,152 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+
+// Initialize variables
+int lcd_key = 0;
+int adc_key_in = 0;
+int curTemp=0;
+//int tempintercept = 485-125;
+int tempintercept = 175;
+int scaryhigh = 300;
+int settemp=215;
+int Pin=A1;
+int Pout=13;
+boolean select=true;
+////
+char buf[10]; // string buffer for itoa function
+#define btnRIGHT 0
+#define btnUP 1
+#define btnDOWN 2
+#define btnLEFT 3
+#define btnSELECT 4
+#define btnNONE 5
+#define V1 50
+#define V2 154
+#define V3 379
+#define V4 554
+#define V5 791
+#define VNONE 791
+// read the buttons
+int read_LCD_buttons()
+{
+adc_key_in = analogRead(0); // read the value from the sensor
+// my buttons when read are centered at these valies: 0, 144, 329, 504, 741
+// we add approx 50 to those values and check to see if we are close
+if (adc_key_in > VNONE) return btnNONE;
+// We make this the 1st option for speed reasons since it will be the most likely result
+else if (adc_key_in <= V1) return btnRIGHT;
+else if (adc_key_in <= V2) return btnUP;
+else if (adc_key_in <= V3) return btnDOWN;
+else if (adc_key_in <= V4) return btnLEFT;
+else if (adc_key_in <= V5) return btnSELECT;
+return btnNONE; // when all others fail, return this...
+}
+
+// Setup pins
+void setup(){
+ pinMode(Pin, INPUT);
+ pinMode(Pout, OUTPUT);
+ lcd.begin(16,2);
+ lcd.clear();
+// void loop();
+}
+void loop(){        // Heater
+// Compute current temperature
+delay(400);
+curTemp = (analogRead(Pin))/5-tempintercept; //voltage readin +/- intercept and * slope
+lcd.setCursor(0, 0);
+lcd.print("Temp = ");
+lcd.print(curTemp);
+lcd.print(" C");
+lcd.setCursor(0, 1);
+lcd.print("Set to ");
+lcd.print(settemp);
+lcd.print(" C");
+//checkpause();
+choosetemp();
+
+// Turn the heater on while the current temperature < miniumum threshold
+if(curTemp<settemp){
+digitalWrite(Pout,HIGH); // Set the pin high
+}
+else if (curTemp>scaryhigh){
+lcd.print("Run for cover!");
+digitalWrite(Pout,LOW);
+}
+else digitalWrite(Pout,LOW);
+}
+
+
+
+// check for a select press
+//void checkpause(){
+//digitalWrite(13,LOW); // For safety
+//switch (lcd_key) 
+//case btnSELECT:
+//{if(select==false)
+//select=true;
+//else select=false;
+//break;
+//}
+//if(select=true){
+//choosetemp();
+//}
+//}
+
+// Choose the set temperature
+void choosetemp(){
+lcd.setCursor(0,1);
+lcd.print("Set to ");
+lcd.print(settemp);
+lcd.print(" C");
+lcd_key = read_LCD_buttons();
+switch (lcd_key)
+{
+case btnRIGHT:
+{
+if(settemp>=250){
+lcd.setCursor(0, 0);
+lcd.print("Too high");
+}
+else{ settemp=settemp+10;}
+break;
+}
+case btnLEFT:
+{
+if(settemp<=25){
+lcd.setCursor(0, 0);
+lcd.print("Too low");
+}
+else{settemp=settemp-10;}
+break;
+}
+case btnUP:
+{
+if(settemp>=250){
+lcd.setCursor(0, 0);
+lcd.print("Too high");
+}
+else{settemp=settemp+1;}
+break;
+}
+case btnDOWN:
+{
+if(settemp<=25){
+lcd.setCursor(0, 0);
+lcd.print("Too low");
+}
+else{settemp=settemp-1;}
+break;
+}
+case btnSELECT:
+{if(select==true)
+select=false;
+else{select=true;}
+break;
+}
+case btnNONE:
+{
+break;
+}
+}
+}
