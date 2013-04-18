@@ -78,6 +78,7 @@ lcd.setCursor(0,1);
 lcd.print("Set to ");
 lcd.print(settemp);
 lcd.print(" C");
+lcd_key = read_LCD_buttons();
 switch (lcd_key)
 {
 case btnRIGHT:
@@ -85,6 +86,7 @@ case btnRIGHT:
 if(settemp>=250){
 lcd.setCursor(0, 0);
 lcd.print("Too high");
+delay(1000);
 }
 else {settemp=settemp+10;}
 break;
@@ -94,6 +96,7 @@ case btnLEFT:
 if(settemp<=25){
 lcd.setCursor(0, 0);
 lcd.print("Too low");
+delay(1000);
 }
 else {settemp=settemp-10;}
 break;
@@ -102,7 +105,9 @@ case btnUP:
 
 if(settemp>=250){
 lcd.setCursor(0, 0);
-lcd.print("Too high");}
+lcd.print("Too high");
+delay(1000);
+}
 
 else {settemp=settemp+1;}
 break;
@@ -111,7 +116,9 @@ case btnDOWN:
 
 if(settemp<=25){
 lcd.setCursor(0, 0);
-lcd.print("Too low");}
+lcd.print("Too low");
+delay(1000);
+}
 
 else {settemp=settemp-1;}
 break;
