@@ -38,10 +38,16 @@ void loop(){        // Heater
 curTemp = (analogRead(Pin)-tempintercept)/5; //voltage readin +/- intercept and * slope
 lcd.setCursor(0, 0);
 lcd.print("Temp = ");
+if(curTemp<100){
+lcd.print("0");
+}
 lcd.print(curTemp);
 lcd.print(" C");
 lcd.setCursor(0, 1);
 lcd.print("Set to ");
+if(settemp<100){
+lcd.print("0");
+}
 lcd.print(settemp);
 lcd.print(" C");
 choosetemp();
