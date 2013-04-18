@@ -57,11 +57,12 @@ curTemp = (analogRead(Pin))/5-tempintercept; //voltage readin +/- intercept and 
 lcd.setCursor(0, 0);
 lcd.print("Temp = ");
 lcd.print(curTemp);
+lcd.setCursor(10,0);
 lcd.print(" C");
 lcd.setCursor(0, 1);
 lcd.print("Set to ");
 lcd.print(settemp);
-lcd.print(" C");
+lcd.print(" C   ");
 //checkpause();
 choosetemp();
 
