@@ -1,0 +1,15 @@
+
+// check for a select press
+void checkpause(){
+digitalWrite(13,LOW); // For safety
+switch (lcd_key) 
+case btnSELECT:
+{if(select==false)
+select=true;
+else select=false;
+break;
+}
+if(select=true){
+choosetemp();
+}
+}
