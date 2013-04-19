@@ -1,4 +1,3 @@
-
 // check for a select press
 void checkpause(){
 digitalWrite(13,LOW); // For safety
