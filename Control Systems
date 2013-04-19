@@ -7,10 +7,11 @@ int adc_key_in = 0;
 int curTemp=0;
 //int tempintercept = 485-125;
 int tempintercept = 175;
-int scaryhigh = 300;
+int scaryhigh = 0;
 int settemp=215;
 int Pin=A1;
 int Pout=13;
+boolean kill=true;
 boolean select=true;
 ////
 char buf[10]; // string buffer for itoa function
@@ -52,6 +53,7 @@ void setup(){
 }
 void loop(){        // Heater
 // Compute current temperature
+while(kill==true){
 delay(400);
 curTemp = (analogRead(Pin))/5-tempintercept; //voltage readin +/- intercept and * slope
 lcd.setCursor(0, 0);
@@ -64,37 +66,39 @@ lcd.print("Set to ");
 lcd.print(settemp);
 lcd.print(" C   ");
 //checkpause();
+//while(kill==true){
 choosetemp();
-
 // Turn the heater on while the current temperature < miniumum threshold
 if(curTemp<settemp){
 digitalWrite(Pout,HIGH); // Set the pin high
 }
 else if (curTemp>scaryhigh){
-lcd.print("Run for cover!");
+lcd.setCursor(0,1);
+lcd.print("Run for cover!    ");
 digitalWrite(Pout,LOW);
+kill = false;
 }
 else digitalWrite(Pout,LOW);
 }
-
+}
 
 
 // check for a select press
-//void checkpause(){
-//digitalWrite(13,LOW); // For safety
-//switch (lcd_key) 
-//case btnSELECT:
-//{if(select==false)
-//select=true;
-//else select=false;
-//break;
-//}
-//if(select=true){
-//choosetemp();
-//}
-//}
+void checkpause(){
+digitalWrite(13,LOW); // For safety
+switch (lcd_key) 
+case btnSELECT:
+{if(select==false)
+select=true;
+else select=false;
+break;
+}
+if(select=true){
+choosetemp();
+}
+}
 
-// Choose the set temperature
+ //Choose the set temperature
 void choosetemp(){
 lcd.setCursor(0,1);
 lcd.print("Set to ");
@@ -107,7 +111,7 @@ case btnRIGHT:
 {
 if(settemp>=250){
 lcd.setCursor(0, 0);
-lcd.print("Too high");
+lcd.print("Too high         ");
 }
 else{ settemp=settemp+10;}
 break;
@@ -116,7 +120,7 @@ case btnLEFT:
 {
 if(settemp<=25){
 lcd.setCursor(0, 0);
-lcd.print("Too low");
+lcd.print("Too low     ");
 }
 else{settemp=settemp-10;}
 break;
@@ -125,7 +129,7 @@ case btnUP:
 {
 if(settemp>=250){
 lcd.setCursor(0, 0);
-lcd.print("Too high");
+lcd.print("Too high       ");
 }
 else{settemp=settemp+1;}
 break;
@@ -134,7 +138,7 @@ case btnDOWN:
 {
 if(settemp<=25){
 lcd.setCursor(0, 0);
-lcd.print("Too low");
+lcd.print("Too low      ");
 }
 else{settemp=settemp-1;}
 break;
