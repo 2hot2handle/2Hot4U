@@ -5,7 +5,7 @@ Credit Dr. Palmeri
 int getButtonPress()
 {
   int adcIn;
-  adcIn = analogRead(buttonPin);
+  adcIn = analogRead(0);
   delay(5); 
   if (adcIn < 50) return btnRIGHT;
   else if (adcIn < 195) return btnUP;
