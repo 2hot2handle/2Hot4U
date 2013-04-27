@@ -1,3 +1,7 @@
+/* This code was taken from the example
+Credit Dr. Palmeri
+*/
+
 int getButtonPress()
 {
   int adcIn;
