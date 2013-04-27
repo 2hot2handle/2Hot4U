@@ -1,21 +1,23 @@
-boolean conditions(int increment, int var, int max, int min, char mode){
-  if(var+increment>=max){
-		lcd.setCursor(0, 0);
-		lcd.print("                ");
-		lcd.print("Too High");
-		delay(1000);
-		lcd.print("Select ");
-		lcd.print(mode);
-		return false;
-	}
-	else if (var+increment<=min){
-		lcd.setCursor(0, 0);
-		lcd.print("                ");
-		lcd.print("Too Low");
-		delay(1000);
-		lcd.print("Select ");
-		lcd.print(mode);
-		return false;
-	}
-	return true;
+boolean conditions(int increment, int var, int max, int min, char* mode){
+  if(var+increment>max){
+lcd.setCursor(0, 0);
+lcd.print(" ");
+lcd.print("Too High       ");
+delay(1000);
+lcd.setCursor(0, 0);
+lcd.print(mode);
+lcd.print("        ");
+return false;
+}
+else if (var+increment<min){
+lcd.setCursor(0, 0);
+lcd.print(" ");
+lcd.print("Too Low        ");
+delay(1000);
+lcd.setCursor(0, 0);
+lcd.print(mode);
+lcd.print("     ");
+return false;
+}
+return true;
 }
