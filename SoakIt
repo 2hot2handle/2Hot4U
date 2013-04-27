@@ -2,12 +2,12 @@ void SoakIt(int Length){
 unsigned long windowStartTime = millis();
 
 //Define Variables we'll be connecting to
-double Setpoint, Input, Output;
+double SetTemp, CurTemp, Output;
 
 PID myPID(&CurTemp, &Output, &SetTemp,2,5,1, DIRECT);
 
 int WindowSize = 1000;
- SetTemp = 150;
+ SetTemp = 150; // Target Temperature
   //tell the PID to range between 0 and the full window size
   myPID.SetOutputLimits(0, WindowSize);
   //turn the PID on
