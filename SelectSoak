@@ -1,6 +1,6 @@
 int SelectSoak(){
   int SoakTime = 90;
-	boolean Soak = true;
+	boolean SoakSelect = true;
 	
     lcd.setCursor(0, 0);
     lcd.print("Choose Reflow   "); // Inform user that they will be inputing values
@@ -12,7 +12,7 @@ int SelectSoak(){
     lcd.setCursor(9, 1);
 	lcd.print("Seconds");
 	// Loop to select Soak Time
-	while(Soak = True){
+	while(SoakSelect){
 	int lcd_key = getButtonPress();
 	switch (lcd_key)
 {
@@ -45,7 +45,7 @@ SoakTime +=-1;
 break;
 }
 case btnSELECT:
-{Soak = false;
+{SoakSelect = false;
 break;
 }
 case btnNONE:
