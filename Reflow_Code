@@ -1,0 +1,47 @@
+/*
+This file is the top level code for the reflow oven tutorial.
+*/
+#include <LiquidCrystal.h>
+#include <PID_v1.h>
+
+// Define Pins
+# define HeaterPin 2
+# define TempPin 5
+
+// Define ADC buttons
+#define btnRIGHT  0
+#define btnUP     1
+#define btnDOWN   2
+#define btnLEFT   3
+#define btnSELECT 4
+#define btnNONE   5
+
+/*
+boolean Input = true;
+boolean Ramp = false;
+boolean Soak = false;
+boolean RampPeak = false;
+boolean Reflow = false;
+boolean Cooling = false;
+int SoakTime, MaxTemp; 
+*/
+
+// Initialize LCD
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+
+void setup(){
+   pinMode(TempPin, INPUT);
+ 	pinMode(HeaterPin, OUTPUT);
+	lcd.begin(16,2);
+	lcd.clear();
+}
+
+void loop(){ 
+int SoakTime = SelectSoak();
+//int MaxTemp = SelectMaxTemp();
+//RampIt();
+//SoakIt(SoakTime);
+//RampToPeak();
+//ReflowIt();
+//CoolIt();
+}
