@@ -1,45 +1,46 @@
 int SelectSoak(){
-  int SoakTime = 90;
-	boolean SoakSelect = true;
-	
+int SoakTime = 90;
+boolean SoakSelect = true;
+    lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Choose Reflow   "); // Inform user that they will be inputing values
+    lcd.print("Choose Reflow "); // Inform user that they will be inputing values
     delay(2000);
-    char str[ ] ="Select soak time";
+    lcd.setCursor(0, 0);
+    char str[17] ="Select soak time";
     lcd.print(str);
     lcd.setCursor(0, 1);
     lcd.print(SoakTime);
     lcd.setCursor(9, 1);
-	lcd.print("Seconds");
-	// Loop to select Soak Time
-	while(SoakSelect){
-	int lcd_key = getButtonPress();
-	switch (lcd_key)
+lcd.print("Seconds");
+// Loop to select Soak Time
+while(SoakSelect){
+int lcd_key = getButtonPress();
+switch (lcd_key)
 {
 case btnRIGHT:
 {
-if(conditions(10,SoakTime,120,60,*str)){
+if(conditions(10,SoakTime,120,60,str)){
 SoakTime +=10;
 }
 break;
 }
 case btnLEFT:
 {
-if(conditions(-10,SoakTime,120,60,*str)){
+if(conditions(-10,SoakTime,120,60,str)){
 SoakTime +=-10;
 }
 break;
 }
 case btnUP:
 {
-if(conditions(1,SoakTime,120,60,*str)){
+if(conditions(1,SoakTime,120,60,str)){
 SoakTime +=1;
 }
 break;
 }
 case btnDOWN:
 {
-if(conditions(-1,SoakTime,120,60,*str)){
+if(conditions(-1,SoakTime,120,60,str)){
 SoakTime +=-1;
 }
 break;
@@ -55,6 +56,7 @@ break;
 }
 lcd.setCursor(0, 1);
 lcd.print(SoakTime);
-delay(300);
+lcd.print("     ");
+delay(250);
 }
 }
