@@ -1,45 +1,44 @@
 int SelectMaxTemp(){
   int MaxTemp = 215;
-	boolean TempSelect = true;
-	
+boolean TempSelect = true;
+
     lcd.setCursor(0, 0);
-    lcd.print("Choose Reflow   "); // Inform user that they will be inputing values
-    delay(2000);
-    char str[ ] ="Select Max Temp ";
+    char str[20] ="Select Max Temp ";
     lcd.print(str);
     lcd.setCursor(0, 1);
     lcd.print(MaxTemp);
     lcd.setCursor(9, 1);
-	lcd.print("C        ");
-	// Loop to select Max Temp
-	while(TempSelect){
-	int lcd_key = getButtonPress();
-	switch (lcd_key)
+    lcd.print("C       ");
+    delay(500);
+// Loop to select Max Temp
+while(TempSelect){
+int lcd_key = getButtonPress();
+switch (lcd_key)
 {
 case btnRIGHT:
 {
-if(conditions(10,MaxTemp,250,200,*str)){
+if(conditions(10,MaxTemp,250,200,str)){
 MaxTemp +=10;
 }
 break;
 }
 case btnLEFT:
 {
-if(conditions(-10,MaxTemp,250,200,*str)){
+if(conditions(-10,MaxTemp,250,200,str)){
 MaxTemp +=-10;
 }
 break;
 }
 case btnUP:
 {
-if(conditions(1,MaxTemp,250,200,*str)){
+if(conditions(1,MaxTemp,250,200,str)){
 MaxTemp +=1;
 }
 break;
 }
 case btnDOWN:
 {
-if(conditions(-1,MaxTemp,250,200,*str)){
+if(conditions(-1,MaxTemp,250,200,str)){
 MaxTemp +=-1;
 }
 break;
@@ -55,6 +54,7 @@ break;
 }
 lcd.setCursor(0, 1);
 lcd.print(MaxTemp);
-delay(300);
+lcd.print("     ");
+delay(250);
 }
 }
