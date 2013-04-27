@@ -18,6 +18,11 @@ while(millis()-windowStartTime<Length*1000){
 CurTemp = (analogRead(TempPin))/5-175; //voltage readin  * slope +/- intercept
   myPID.Compute();
 
+ lcd.setCursor(0, 0);	
+	lcd.print("Soak Temp = ");
+	lcd.print(CurTemp);
+	lcd.setCursor(15,0);
+	lcd.print(" C");
   /**************************************************
    * turn the output pin on/off based on pid output *
    **************************************************/
