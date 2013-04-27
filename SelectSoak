@@ -59,4 +59,5 @@ lcd.print(SoakTime);
 lcd.print("     ");
 delay(250);
 }
+return SoakTime;
 }
