@@ -4,10 +4,10 @@ unsigned long windowStartTime = millis();
 //Define Variables we'll be connecting to
 double SetTempRate, CurSlope, Output;
 
-PID myPID(&CurTemp, &Output, &SetTemp,2,5,1, DIRECT);
+PID myPID(&CurSlope, &Output, &SetTempRate,2,5,1, DIRECT);
 double StartTemp = (analogRead(TempPin))/5-175; //voltage readin  * slope +/- intercept
 int WindowSize = 1000;
- SetTempRate = 2/1000; // Target Temperature Rate
+ SetTempRate = 2; // Target Temperature Rate
   //tell the PID to range between 0 and the full window size
   myPID.SetOutputLimits(0, WindowSize);
   //turn the PID on
