@@ -1,0 +1,46 @@
+int RampIt(int MaxTemp){
+unsigned long windowStartTime = millis();
+
+//Define Variables we'll be connecting to
+double SetTempRate, CurSlope, Output;
+
+PID myPID(&CurTemp, &Output, &SetTemp,2,5,1, DIRECT);
+double StartTemp = (analogRead(TempPin))/5-175; //voltage readin  * slope +/- intercept
+int WindowSize = 1000;
+ SetTempRate = 2/1000; // Target Temperature Rate
+  //tell the PID to range between 0 and the full window size
+  myPID.SetOutputLimits(0, WindowSize);
+  //turn the PID on
+  myPID.SetMode(AUTOMATIC);
+  int newMax=0;
+while(CurTemp<MaxTemp) {
+
+  CurTemp = (analogRead(TempPin))/5-175; //voltage readin  * slope +/- intercept
+	if(CurTemp>newMax) newMax = CurTemp;
+	CurSlope = (CurTemp- StartTemp)*1000/(millis()-windowStartTime);
+	lcd.setCursor(0, 1);
+	lcd.print("Ramp Slope=");
+	lcd.print(CurSlope);
+	lcd.setCursor(14, 1);
+	lcd.print("C/s");
+	lcd.setCursor(0, 0);	
+	lcd.print("Temp = ");
+	lcd.print(CurTemp);
+	lcd.setCursor(10,0);
+	lcd.print(" C");
+
+  	myPID.Compute();
+
+	/**************************************************
+   	* turn the output pin on/off based on pid output *
+   	**************************************************/
+  	unsigned long now = millis();
+  	if(now - windowStartTime>WindowSize){ //time to shift the Relay Window
+    	windowStartTime += WindowSize;
+  	}
+  if(Output > now - windowStartTime) digitalWrite(HeaterPin,HIGH);
+  else digitalWrite(HeaterPin,LOW)
+}
+if(MaxTemp>218) return newMax 
+return CurSlope;
+}
