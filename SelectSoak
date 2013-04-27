@@ -1,4 +1,4 @@
-void SelectSoak(){
+int SelectSoak(){
   int SoakTime =0;
 	boolean Soak = true;
 	
