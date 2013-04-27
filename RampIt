@@ -39,8 +39,8 @@ while(CurTemp<MaxTemp) {
     	windowStartTime += WindowSize;
   	}
   if(Output > now - windowStartTime) digitalWrite(HeaterPin,HIGH);
-  else digitalWrite(HeaterPin,LOW)
+  else digitalWrite(HeaterPin,LOW);
 }
-if(MaxTemp>218) return newMax 
+if(MaxTemp>218) return newMax;
 return CurSlope;
 }
