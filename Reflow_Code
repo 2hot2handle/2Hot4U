@@ -16,7 +16,7 @@ This file is the top level code for the reflow oven tutorial.
 #define btnSELECT 4
 #define btnNONE   5
 
-Unsigned Long CurTime;
+unsigned long CurTime;
 /*
 boolean Input = true;
 boolean Ramp = false;
@@ -40,11 +40,24 @@ void setup(){
 void loop(){ 
 int SoakTime = SelectSoak();
 int MaxTemp = SelectMaxTemp();
-//int RampSlope = RampIt(150);
-//SoakIt(SoakTime);
+int RampSlope = RampIt(150);
+lcd.clear();
+lcd.setCursor(0, 1);
+lcd.print("Debug            ");
+lcd.setCursor(0, 0);
+lcd.print(SoakTime);
+delay(1500);
+SoakIt(SoakTime);
 //int ReflowRampSlope = RampIt(218);
 //ReflowIt(MaxTemp-3);
-//digitalWrite(HeaterPin,LOW);//CoolIt();
+digitalWrite(HeaterPin,LOW);//CoolIt();
+lcd.clear();
+lcd.setCursor(0, 1);
 lcd.print("Debug            ");
+lcd.setCursor(0, 0);
+lcd.print(RampSlope);
+delay(1500);
+while(getButtonPress()!=btnSELECT){
+delay(100);
 }
-
+}
