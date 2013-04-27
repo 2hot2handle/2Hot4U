@@ -1,5 +1,5 @@
 int SelectSoak(){
-  int SoakTime =0;
+  int SoakTime = 90;
 	boolean Soak = true;
 	
     lcd.setCursor(0, 0);
