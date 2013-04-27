@@ -16,6 +16,7 @@ This file is the top level code for the reflow oven tutorial.
 #define btnSELECT 4
 #define btnNONE   5
 
+Unsigned Long CurTime;
 /*
 boolean Input = true;
 boolean Ramp = false;
@@ -30,18 +31,20 @@ int SoakTime, MaxTemp;
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 void setup(){
-   pinMode(TempPin, INPUT);
- 	pinMode(HeaterPin, OUTPUT);
+ 	//pinMode(TempPin, INPUT);
+ 	//pinMode(HeaterPin, OUTPUT);
 	lcd.begin(16,2);
 	lcd.clear();
 }
 
 void loop(){ 
 int SoakTime = SelectSoak();
-//int MaxTemp = SelectMaxTemp();
-//RampIt();
+int MaxTemp = SelectMaxTemp();
+//int RampSlope = RampIt(150);
 //SoakIt(SoakTime);
-//RampToPeak();
-//ReflowIt();
-//CoolIt();
+//int ReflowRampSlope = RampIt(218);
+//ReflowIt(MaxTemp-3);
+//digitalWrite(HeaterPin,LOW);//CoolIt();
+lcd.print("Debug            ");
 }
+
