@@ -1,0 +1,32 @@
+void SoakIt(int Length){
+unsigned long windowStartTime = millis();
+
+//Define Variables we'll be connecting to
+double Setpoint, Input, Output;
+
+PID myPID(&CurTemp, &Output, &SetTemp,2,5,1, DIRECT);
+
+int WindowSize = 1000;
+ SetTemp = 150;
+  //tell the PID to range between 0 and the full window size
+  myPID.SetOutputLimits(0, WindowSize);
+  //turn the PID on
+  myPID.SetMode(AUTOMATIC);
+  
+while(millis()-windowStartTime<Length*1000){
+
+CurTemp = (analogRead(TempPin))/5-175; //voltage readin  * slope +/- intercept
+  myPID.Compute();
+
+  /**************************************************
+   * turn the output pin on/off based on pid output *
+   **************************************************/
+  unsigned long now = millis();
+  if(now - windowStartTime>WindowSize)
+  { //time to shift the Relay Window
+    windowStartTime += WindowSize;
+  }
+  if(Output > now - windowStartTime) digitalWrite(HeaterPin,HIGH);
+  else digitalWrite(HeaterPin,LOW)
+}
+}
