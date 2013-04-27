@@ -18,28 +18,28 @@ int SelectMaxTemp(){
 {
 case btnRIGHT:
 {
-if(conditions(10,MaxTemp,250,200,str)){
+if(conditions(10,MaxTemp,250,200,*str)){
 MaxTemp +=10;
 }
 break;
 }
 case btnLEFT:
 {
-if(conditions(-10,MaxTemp,250,200,str)){
+if(conditions(-10,MaxTemp,250,200,*str)){
 MaxTemp +=-10;
 }
 break;
 }
 case btnUP:
 {
-if(conditions(1,MaxTemp,250,200,str)){
+if(conditions(1,MaxTemp,250,200,*str)){
 MaxTemp +=1;
 }
 break;
 }
 case btnDOWN:
 {
-if(conditions(-1,MaxTemp,250,200,str)){
+if(conditions(-1,MaxTemp,250,200,*str)){
 MaxTemp +=-1;
 }
 break;
