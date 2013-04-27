@@ -57,4 +57,5 @@ lcd.print(MaxTemp);
 lcd.print("     ");
 delay(250);
 }
+return MaxTemp;
 }
