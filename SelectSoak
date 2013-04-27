@@ -18,28 +18,28 @@ int SelectSoak(){
 {
 case btnRIGHT:
 {
-if(conditions(10,SoakTime,120,60,str)){
+if(conditions(10,SoakTime,120,60,*str)){
 SoakTime +=10;
 }
 break;
 }
 case btnLEFT:
 {
-if(conditions(-10,SoakTime,120,60,str)){
+if(conditions(-10,SoakTime,120,60,*str)){
 SoakTime +=-10;
 }
 break;
 }
 case btnUP:
 {
-if(conditions(1,SoakTime,120,60,str)){
+if(conditions(1,SoakTime,120,60,*str)){
 SoakTime +=1;
 }
 break;
 }
 case btnDOWN:
 {
-if(conditions(-1,SoakTime,120,60,str)){
+if(conditions(-1,SoakTime,120,60,*str)){
 SoakTime +=-1;
 }
 break;
