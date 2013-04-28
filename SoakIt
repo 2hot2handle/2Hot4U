@@ -1,28 +1,35 @@
+# include <PID_v1.h>
+
 void SoakIt(int Length){
 unsigned long windowStartTime = millis();
-
+unsigned long StartTime = millis();
 //Define Variables we'll be connecting to
 double SetTemp, CurTemp, Output;
 
 PID myPID(&CurTemp, &Output, &SetTemp,2,5,1, DIRECT);
-
-int WindowSize = 1000;
- SetTemp = 150; // Target Temperature
+  int WindowSize = 1000;
+  SetTemp = 150; // Target Temperature
   //tell the PID to range between 0 and the full window size
   myPID.SetOutputLimits(0, WindowSize);
   //turn the PID on
   myPID.SetMode(AUTOMATIC);
   
-while(millis()-windowStartTime<Length*1000){
+  lcd.clear();
+  
+while(((millis()-StartTime)/1000)<Length){
+  if(CurTemp>200) break;
 
-CurTemp = (analogRead(TempPin))/5-175; //voltage readin  * slope +/- intercept
+  CurTemp = (analogRead(TempPin))/5-175; //voltage readin * slope +/- intercept
   myPID.Compute();
 
- lcd.setCursor(0, 0);	
-	lcd.print("Soak Temp = ");
-	lcd.print(CurTemp);
-	lcd.setCursor(15,0);
-	lcd.print(" C");
+  lcd.setCursor(0, 0);
+  lcd.print("Soak Temp = ");
+  lcd.print(CurTemp);
+  lcd.setCursor(15,0);
+  lcd.print(" C");
+  lcd.setCursor(0, 1);
+  lcd.print("Soak Time = ");
+  lcd.print((millis()-StartTime)/1000);
   /**************************************************
    * turn the output pin on/off based on pid output *
    **************************************************/
