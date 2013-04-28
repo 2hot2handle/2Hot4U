@@ -1,9 +1,7 @@
-int SelectMaxTemp(){
-  int MaxTemp = 215;
+int SelectMaxTemp(boolean maxReflow, char* str, int MaxTemp, int maxT, int minT){
 boolean TempSelect = true;
 
     lcd.setCursor(0, 0);
-    char str[20] ="Select Max Temp ";
     lcd.print(str);
     lcd.setCursor(0, 1);
     lcd.print(MaxTemp);
@@ -17,28 +15,28 @@ switch (lcd_key)
 {
 case btnRIGHT:
 {
-if(conditions(10,MaxTemp,250,200,str)){
+if(conditions(10,MaxTemp,maxT,minT,str)){
 MaxTemp +=10;
 }
 break;
 }
 case btnLEFT:
 {
-if(conditions(-10,MaxTemp,250,200,str)){
+if(conditions(-10,MaxTemp,maxT,minT,str)){
 MaxTemp +=-10;
 }
 break;
 }
 case btnUP:
 {
-if(conditions(1,MaxTemp,250,200,str)){
+if(conditions(1,MaxTemp,maxT,minT,str)){
 MaxTemp +=1;
 }
 break;
 }
 case btnDOWN:
 {
-if(conditions(-1,MaxTemp,250,200,str)){
+if(conditions(-1,MaxTemp,maxT,minT,str)){
 MaxTemp +=-1;
 }
 break;
