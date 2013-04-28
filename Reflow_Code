@@ -16,17 +16,6 @@ This file is the top level code for the reflow oven tutorial.
 #define btnSELECT 4
 #define btnNONE   5
 
-unsigned long CurTime;
-/*
-boolean Input = true;
-boolean Ramp = false;
-boolean Soak = false;
-boolean RampPeak = false;
-boolean Reflow = false;
-boolean Cooling = false;
-int SoakTime, MaxTemp; 
-*/
-
 // Initialize LCD
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
@@ -38,26 +27,50 @@ void setup(){
 }
 
 void loop(){ 
-int SoakTime = SelectSoak();
-int MaxTemp = SelectMaxTemp();
-int RampSlope = RampIt(150);
-lcd.clear();
-lcd.setCursor(0, 1);
-lcd.print("Debug            ");
-lcd.setCursor(0, 0);
-lcd.print(SoakTime);
-delay(1500);
-SoakIt(SoakTime);
-//int ReflowRampSlope = RampIt(218);
-//ReflowIt(MaxTemp-3);
-digitalWrite(HeaterPin,LOW);//CoolIt();
-lcd.clear();
-lcd.setCursor(0, 1);
-lcd.print("Debug            ");
-lcd.setCursor(0, 0);
-lcd.print(RampSlope);
-delay(1500);
-while(getButtonPress()!=btnSELECT){
-delay(100);
-}
+  int SoakTime = SelectSoak();
+  char strSoak[20] ="Select Soak Temp";
+  int SoakTemp = SelectMaxTemp(false,strSoak,150,170,130);
+  char strMax[20] ="Select Max Temp ";
+  int MaxTemp = SelectMaxTemp(true,strMax,245,270,218);
+  double slope = 2;
+  boolean reflow = false;
+  int RampSlope = RampIt(150,slope,reflow);
+  lcd.clear();
+  lcd.setCursor(0, 1);
+  lcd.print("Debug            ");
+  lcd.setCursor(0, 0);
+  lcd.print(SoakTime);
+  delay(1500);
+  SoakIt(SoakTime);
+  int ReflowRampSlope = RampIt(218,slope,reflow);
+  slope=1;
+  int MaxActual = RampIt(MaxTemp-3,slope,reflow);
+  slope=-3;
+  int CoolRate = CoolIt(200,slope);
+  digitalWrite(HeaterPin,LOW);
+  lcd.clear();
+  lcd.setCursor(0, 1);
+  lcd.print("Rate: Ramp=");
+  lcd.print(RampSlope);
+  lcd.setCursor(13, 1);
+  lcd.print("C/s");
+  lcd.setCursor(0, 0);
+  lcd.print("Ref Ramp=");
+  lcd.print(RampSlope);
+  lcd.setCursor(13, 1);
+  lcd.print("C/s");
+  delay(1500);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Actual Max=");
+  lcd.print(MaxActual);
+  lcd.setCursor(15, 1);
+  lcd.print("C");
+  delay(1500);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Press Select");
+  while(getButtonPress()!=btnSELECT){
+    delay(100);
+  }
 }
