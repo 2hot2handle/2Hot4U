@@ -1,0 +1,49 @@
+
+# include <PID_v1.h>
+
+int CoolIt(int MinTemp, double SetTempRate){
+unsigned long windowStartTime = millis();
+unsigned long StartTime = millis();
+//Define Variables we'll be connecting to
+double CurSlope, Output,CurTemp;
+
+PID myPID(&CurSlope, &Output, &SetTempRate,2,5,1, DIRECT);
+double StartTemp = (analogRead(TempPin))/5-175; //voltage readin * slope +/- intercept
+int WindowSize = 1000;
+  //tell the PID to range between 0 and the full window size
+  myPID.SetOutputLimits(0, WindowSize);
+  //turn the PID on
+  myPID.SetMode(AUTOMATIC);
+  int newMax=0;
+  lcd.clear();
+while(CurTemp>MinTemp) {
+  CurTemp = (analogRead(TempPin))/5-175; //voltage readin * slope +/- intercept
+  if(CurTemp>newMax) newMax = CurTemp;
+  CurSlope = (CurTemp- StartTemp)*1000/(millis()-StartTime);
+  
+  //Print Info
+  lcd.setCursor(0, 1);
+  lcd.print("Slope=");
+  lcd.print(CurSlope);
+  lcd.setCursor(10, 1);
+  lcd.print("   C/s");
+  lcd.setCursor(0, 0);
+  lcd.print("Ramp Temp =");
+  lcd.print(CurTemp);
+  lcd.setCursor(14,0);
+  lcd.print(" C");
+
+   myPID.Compute();
+
+/**************************************************
+    * turn the output pin on/off based on pid output *
+    **************************************************/
+   unsigned long now = millis();
+   if(now - windowStartTime>WindowSize){ //time to shift the Relay Window
+     windowStartTime += WindowSize;
+   }
+  if(Output > now - windowStartTime) digitalWrite(HeaterPin,HIGH);
+  else digitalWrite(HeaterPin,LOW);
+}
+return CurSlope;
+}
