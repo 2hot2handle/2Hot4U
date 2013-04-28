@@ -1,16 +1,15 @@
 
 # include <PID_v1.h>
 
-int RampIt(int MaxTemp){
+int RampIt(int MaxTemp, double SetTempRate, boolean Reflow){
 unsigned long windowStartTime = millis();
 unsigned long StartTime = millis();
 //Define Variables we'll be connecting to
-double SetTempRate, CurSlope, Output,CurTemp;
+double CurSlope, Output,CurTemp;
 
 PID myPID(&CurSlope, &Output, &SetTempRate,2,5,1, DIRECT);
 double StartTemp = (analogRead(TempPin))/5-175; //voltage readin * slope +/- intercept
 int WindowSize = 1000;
- SetTempRate = 2; // Target Temperature Rate
   //tell the PID to range between 0 and the full window size
   myPID.SetOutputLimits(0, WindowSize);
   //turn the PID on
@@ -18,20 +17,21 @@ int WindowSize = 1000;
   int newMax=0;
   lcd.clear();
 while(CurTemp<MaxTemp) {
-
   CurTemp = (analogRead(TempPin))/5-175; //voltage readin * slope +/- intercept
-if(CurTemp>newMax) newMax = CurTemp;
-CurSlope = (CurTemp- StartTemp)*1000/(millis()-StartTime);
-lcd.setCursor(0, 1);
-lcd.print("Slope=");
-lcd.print(CurSlope);
-lcd.setCursor(10, 1);
-lcd.print("   C/s");
-lcd.setCursor(0, 0);
-lcd.print("Ramp Temp =");
-lcd.print(CurTemp);
-lcd.setCursor(14,0);
-lcd.print(" C");
+  if(CurTemp>newMax) newMax = CurTemp;
+  CurSlope = (CurTemp- StartTemp)*1000/(millis()-StartTime);
+  
+  //Print Info
+  lcd.setCursor(0, 1);
+  lcd.print("Slope=");
+  lcd.print(CurSlope);
+  lcd.setCursor(10, 1);
+  lcd.print("   C/s");
+  lcd.setCursor(0, 0);
+  lcd.print("Ramp Temp =");
+  lcd.print(CurTemp);
+  lcd.setCursor(14,0);
+  lcd.print(" C");
 
    myPID.Compute();
 
@@ -45,6 +45,6 @@ lcd.print(" C");
   if(Output > now - windowStartTime) digitalWrite(HeaterPin,HIGH);
   else digitalWrite(HeaterPin,LOW);
 }
-if(MaxTemp>218) return newMax;
+if(Reflow) return newMax;
 return CurSlope;
 }
