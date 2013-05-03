@@ -1,0 +1,17 @@
+/* 
+This code was taken from the example
+Credit Dr. Palmeri
+*/
+
+int getButtonPress()
+{
+  int adcIn;
+  adcIn = analogRead(0);
+  delay(5);
+  if (adcIn < 50) return btnRIGHT;
+  else if (adcIn < 195) return btnUP;
+  else if (adcIn < 380) return btnDOWN;
+  else if (adcIn < 555) return btnLEFT;
+  else if (adcIn < 800) return btnSELECT;
+  else return btnNONE;
+}
