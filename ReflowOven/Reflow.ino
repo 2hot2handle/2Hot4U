@@ -48,7 +48,7 @@ to the initial welcome screen
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 void setup(){
-   pinMode(TempPin, INPUT);
+ 	pinMode(TempPin, INPUT);
  	pinMode(HeaterPin, OUTPUT);
         Serial.begin(9600);
 	lcd.begin(16,2);
@@ -99,13 +99,14 @@ void loop(){
   
   char strCool[20] ="COOL Time:";  
   int CoolTime = SelectTime(strCool,100,MaxTemp); 
-  int TotalTime = CoolTime + ReflowTime + SoakTime + RampTime+ (int )(millis()/1000)+20;
+  int TotalTime = CoolTime + ReflowTime + SoakTime + RampTime+ (int )(millis()/1000)+30;
 
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("PREHEAT STAGE");
   digitalWrite(HeaterPin,HIGH);
-  delay(20000);
+  int PreheatStart = millis();
+  delay(30000);
   digitalWrite(HeaterPin,LOW);
   lcd.setCursor(0,0);
   lcd.print("Begin Reflow");
