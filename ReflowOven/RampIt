@@ -1,0 +1,96 @@
+/*
+Controls the Arduino during the ramp stages; initial RAMP (ramp to soak) and
+FLOW (ramp to peak)
+Used PID controller with set constants to control the output to the heater based
+on the difference between current temperature and set point temperature
+CurTemp = current temperature. calculated using linearization between voltage reading
+  and thermocouple output
+TargetTemp = set point temperature (target). calculated as the slope of each ramp
+  multiplied by the time elapsed in the stage and added to the starting temperature of
+  the stage
+Output = output of PID to heater (controls ON/OFF state)
+*/
+
+# include <PID_v1.h>
+
+int counter=0;
+int RampIt(int MaxTemp, double StageTime, int TotalTime, char* str){
+unsigned long windowStartTime = millis();
+unsigned long StartTime = millis();
+
+//Define Variables we'll be connecting to
+double TargetTemp, Output,CurTemp;
+double kp = 30; //(proportional gain - difference between the current temperature and the set point)
+double ki = 5; //(integral gain - proportional to the magnitude and duration of error)
+double kd = 1; //(derivative gain - slope of the error over time)
+
+ pinMode(TempPin, INPUT);
+ pinMode(HeaterPin, OUTPUT);
+
+PID myPID(&CurTemp, &Output, &TargetTemp,kp,ki,kd, DIRECT);
+double StartTemp = (analogRead(5))*.0047/.005; //voltage reading * slope +/- intercept
+int WindowSize = 1000;
+  //tell the PID to range between 0 and the full window size
+  myPID.SetOutputLimits(0, WindowSize);
+  //turn the PID on
+  myPID.SetMode(AUTOMATIC);
+  int newMax=0;
+  //lcd.clear();
+  while((millis()-StartTime)/1000<StageTime) {
+  CurTemp = (analogRead(5))*.0047/.005; //voltage reading * slope +/- intercept
+  if(counter>1000){  
+  /*
+  Print to serial port for plotting in MATLAB
+  */
+  Serial.print(CurTemp);
+  Serial.print('\t');
+  Serial.print(millis()/1000);
+  Serial.print('\n');
+  
+  /* 
+  calculation of target temperature at each measurement
+  */
+  TargetTemp = ((MaxTemp-StartTemp)/StageTime)*((millis()-StartTime)/1000)+StartTemp;
+  if(CurTemp>MaxTemp)  TargetTemp = MaxTemp;
+  if(CurTemp>newMax) newMax = CurTemp;
+  /*
+  Record maximum temperature from each ramp
+  newMax is redefined every time a new high temperature value is achieved
+  */
+  counter=0;
+  
+  //Print Info
+  lcd.setCursor(0, 1);
+  lcd.print("Run Time: ");
+  lcd.print(TotalTime-(int )(millis()/1000));
+  lcd.print("          ");  
+  lcd.setCursor(15, 1);
+  lcd.print("s");
+  lcd.setCursor(0, 0);
+  lcd.print(str);
+  lcd.print(" T: ");
+  lcd.print(CurTemp);
+  lcd.setCursor(13,0);
+  lcd.print(" ");
+  lcd.print((char)223);
+  lcd.print("C");
+  }
+  counter+=1;
+   myPID.Compute();
+
+/*
+turn the output pin on/off based on pid output
+*/
+   unsigned long now = millis();
+   if(now - windowStartTime>WindowSize){ //time to shift the Relay Window
+     windowStartTime += WindowSize;
+   }
+  if(Output > now - windowStartTime) digitalWrite(HeaterPin,HIGH);
+  else digitalWrite(HeaterPin,LOW);
+}
+return newMax;
+/*
+Maximum temperature value reached in the ramp is returned to the
+Reflow.ino code for use in statistics calculations
+*/
+}
