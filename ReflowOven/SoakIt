@@ -1,0 +1,65 @@
+/* 
+Controls the Arduino during the SOAK portion of the reflow curve
+Uses a PID controller with defined coefficients to maintain the oven temperature
+as close to the set temperature as possible
+The output from the PID sets the state of the ouptut pin to control the on/off state
+of the heater
+*/
+# include <PID_v1.h>
+
+int SoakIt(int SoakTime, int TotalTime, int SetTempin){
+unsigned long windowStartTime = millis();
+unsigned long StartTime = millis();
+//Define Variables we'll be connecting to
+double SetTemp, CurTemp, Output;
+
+double kp = 5; //(proportional gain - difference between the current temperature and the set point)
+double ki = 5; //(integral gain - proportional to the magnitude and duration of error)
+double kd = 1; //(derivative gain - slope of the error over time)
+SetTemp = SetTempin;
+PID myPID(&CurTemp, &Output, &SetTemp,kp,ki,kd, DIRECT);
+  int WindowSize = 1000;
+  //tell the PID to range between 0 and the full window size
+  myPID.SetOutputLimits(0, WindowSize);
+  //turn the PID on
+  myPID.SetMode(AUTOMATIC);
+  
+                 
+  
+while(((millis()-StartTime)/1000)<SoakTime){
+  //if(CurTemp>300) break;
+
+if(counter>1000){
+  CurTemp =  (analogRead(5))*.0047/.005; //voltage readin * slope +/- intercept
+  Serial.print(CurTemp);
+  Serial.print('\t');
+  Serial.print(millis()/1000);
+  Serial.print('\n');
+ 
+  ///lcd.clear();
+  counter=0;
+  lcd.setCursor(0, 0);
+  lcd.print("SOAK T: ");
+  lcd.print(CurTemp);
+  lcd.setCursor(13,0);
+  lcd.print(" ");
+  lcd.print((char)223);
+  lcd.print("C");
+  lcd.setCursor(0, 1);
+  lcd.print("Run Time: ");
+  lcd.print(TotalTime-(millis()/1000));
+  lcd.print("   ");
+  lcd.setCursor(15,1);
+  lcd.print("s");  
+}
+counter+=1;
+myPID.Compute();
+  unsigned long now = millis();
+  if(now - windowStartTime>WindowSize)
+  { //shift the Relay Window
+    windowStartTime += WindowSize;
+  }
+  if(Output > now - windowStartTime) digitalWrite(HeaterPin,HIGH);
+  else digitalWrite(HeaterPin,LOW);
+}
+}
