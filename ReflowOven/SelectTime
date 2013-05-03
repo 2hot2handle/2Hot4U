@@ -1,0 +1,99 @@
+/*
+Allows the user to select time values for the sloped portions of the curve
+Used for RAMP time, FLOW time, and COOL time (SOAK time controlled by different code)
+The slope is found as the difference between the start and end temperatures of 
+each curve portion. Maximum and minimum allowable time values are found based on this slope
+
+*/
+int SelectTime(char* str, int MaxTemp, int StartTemp){
+
+//int CurTemp = (analogRead(5))*.0047/.005;;
+
+int MinTime = (MaxTemp-StartTemp)/3;
+    MinTime = abs(MinTime);
+int MaxTime = (MaxTemp-StartTemp);
+    MaxTime = abs(MaxTime);
+int Time = (MaxTemp-StartTemp)/2;
+    Time = abs(Time);
+    //Time=Time+80;
+    //MinTime=0;
+    //MaxTime=200;
+
+boolean TimeSelect = true;
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(str);
+    lcd.setCursor(0, 1);
+    lcd.print(Time);
+    lcd.setCursor(5,1);
+    lcd.print("s");
+    
+/* 
+Loop to select durations. Uses a switch case to read the LCD buttons
+and makes adjustments to the time values accordingly
+Checks with each iteration that the time values being set are
+within allowable ranges
+*/
+while(TimeSelect){
+int lcd_key = getButtonPress();
+switch (lcd_key)
+{
+case btnRIGHT:
+{
+if(conditions(10,Time,MaxTime,MinTime,str)){
+Time +=10;
+/*
+Adds 10s to time value
+*/
+}
+break;
+}
+case btnLEFT:
+{
+if(conditions(-10,Time,MaxTime,MinTime,str)){
+Time +=-10;
+/*
+Subtracts 10s from time value
+*/
+}
+break;
+}
+case btnUP:
+{
+if(conditions(1,Time,MaxTime,MinTime,str)){
+Time +=1;
+/*
+Adds 1s to time value
+*/
+}
+break;
+}
+case btnDOWN:
+{
+if(conditions(-1,Time,MaxTime,MinTime,str)){
+Time +=-1;
+/*
+Subtracts 1s from time value
+*/
+}
+break;
+}
+case btnSELECT:
+{TimeSelect = false;
+break;
+}
+case btnNONE:
+{
+break;
+}
+}
+lcd.setCursor(0, 1);
+lcd.print(Time);
+lcd.print(" s   ");
+delay(300);
+}
+return Time;
+/*
+Displays time value to user and returns it to Reflow.ino
+*/
+}
