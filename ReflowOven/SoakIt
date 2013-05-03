@@ -27,7 +27,16 @@ PID myPID(&CurTemp, &Output, &SetTemp,kp,ki,kd, DIRECT);
                  
   
 while(((millis()-StartTime)/1000)<SoakTime){
-  //if(CurTemp>300) break;
+  if(CurTemp>300){
+    digitalWrite(HeaterPin,LOW);
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Temp too high!");
+    lcd.setCursor(0,1);
+    lcd.print("Heater Off");
+    delay(10000);
+    break;}
+
 
 if(counter>1000){
   CurTemp =  (analogRead(5))*.0047/.005; //voltage readin * slope +/- intercept
