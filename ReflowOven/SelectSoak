@@ -1,0 +1,82 @@
+/*
+Used to allow the user to specify a duration for the SOAK portion
+of the reflow curve
+This value has an allowable range of 60 to 120 seconds
+On each iteration, the user's input is checked to ensure that it 
+will maintain values within this range
+*/
+int SelectSoak(){
+int SoakTime = 90;
+boolean SoakSelect = true;
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    char str[17] ="SOAK Time:";
+    lcd.print(str);
+    lcd.setCursor(0, 1);
+    lcd.print(SoakTime);
+    lcd.setCursor(5, 1);
+    
+// Loop to select Soak Time
+while(SoakSelect){
+int lcd_key = getButtonPress();
+switch (lcd_key)
+{
+case btnRIGHT:
+{
+if(conditions(10,SoakTime,120,60,str)){
+SoakTime +=10;
+/*
+Adds 10s to time value
+*/
+}
+break;
+}
+case btnLEFT:
+{
+if(conditions(-10,SoakTime,120,60,str)){
+SoakTime +=-10;
+/*
+Subtracts 10s from time value
+*/
+}
+break;
+}
+case btnUP:
+{
+if(conditions(1,SoakTime,120,60,str)){
+SoakTime +=1;
+/*
+Adds 1s to time value
+*/
+}
+break;
+}
+case btnDOWN:
+{
+if(conditions(-1,SoakTime,120,60,str)){
+SoakTime +=-1;
+/*
+Subtracts 1s from time value
+*/
+}
+break;
+}
+case btnSELECT:
+{SoakSelect = false;
+break;
+}
+case btnNONE:
+{
+break;
+}
+}
+lcd.setCursor(0, 1);
+lcd.print(SoakTime);
+lcd.print(" s  ");
+delay(300);
+}
+return SoakTime;
+/*
+Displays time value to user and returns it to Reflow.ino
+*/
+}
