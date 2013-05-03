@@ -27,9 +27,9 @@ end
 
 fclose(obj);
 
-%title('Reflow Run')
-%xlabel('Time (s)'); ylabel('Temperature (C)')
+title('Reflow Run')
+xlabel('Time (s)'); ylabel('Temperature (C)')
 
-%fclose(obj);
-%delete(obj);
+fclose(obj);
+delete(obj);
 hold off
