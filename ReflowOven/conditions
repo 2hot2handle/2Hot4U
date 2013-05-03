@@ -1,0 +1,31 @@
+/* 
+Alerts the user if they attempt to input values outside the allowable range of operation
+If the value set is too high, the message "2 HOT 2 HANDLE!" is displayed
+If the value set is too low, the message "ICE ICE BABY!" is displayed
+*/
+
+boolean conditions(int increment, int var, int max, int min, char* mode){
+  if(var+increment>max){
+lcd.setCursor(0,0);
+lcd.print("               ");
+lcd.setCursor(0, 0);
+lcd.print("2 HOT 2 HANDLE!   ");
+delay(1000);
+lcd.setCursor(0, 0);
+lcd.print(mode);
+lcd.print("        ");
+return false;
+}
+else if (var+increment<min){
+lcd.setCursor(0,0);
+lcd.print("              ");
+lcd.setCursor(1, 0);
+lcd.print("ICE ICE BABY!       ");
+delay(1000);
+lcd.setCursor(0, 0);
+lcd.print(mode);
+lcd.print("     ");
+return false;
+}
+return true;
+}
